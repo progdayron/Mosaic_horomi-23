@@ -299,29 +299,35 @@
         }
 
         /* ========================================
-           ГАЛЕРЕЯ
+           ГАЛЕРЕЯ — карточки стали меньше
            ======================================== */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            /* было 220px, стало 180px */
+            gap: 25px;
+            /* чуть меньше расстояние между карточками */
             max-width: 1100px;
             margin: 0 auto 50px;
         }
 
         /* ========================================
-           КАРТОЧКИ
+           КАРТОЧКИ — уменьшенные и более качественные
            ======================================== */
         .card {
             background: rgba(255, 252, 248, 0.2);
             backdrop-filter: blur(8px);
-            border-radius: 20px;
+            border-radius: 24px;
+            /* было 20px, стало 24px — более изящно */
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            /* тень мягче */
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-align: center;
-            padding-bottom: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.6);
+            padding-bottom: 12px;
+            /* меньше отступ снизу */
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            /* рамка тоньше и аккуратнее */
             position: relative;
             cursor: pointer;
             opacity: 0;
@@ -358,7 +364,7 @@
             }
         }
 
-        /* Блик на карточке */
+        /* Блик на карточке — стал более деликатным */
         .card::before {
             content: '';
             position: absolute;
@@ -366,7 +372,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
             opacity: 0;
             transition: opacity 0.5s ease;
             pointer-events: none;
@@ -381,42 +387,51 @@
             content: '';
             position: absolute;
             inset: 2px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             pointer-events: none;
             z-index: 2;
         }
 
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
+            /* подъём чуть меньше, чтобы не перегружать */
             background: rgba(255, 252, 248, 0.4);
-            border-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 50px rgba(90, 62, 43, 0.08);
+            border-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 16px 40px rgba(90, 62, 43, 0.08);
         }
 
         .card img {
             width: 100%;
-            height: 220px;
+            height: 160px;
+            /* было 220px, стало 160px — картинка компактнее и чётче */
             object-fit: cover;
             display: block;
-            transition: transform 0.6s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: transform 0.5s ease;
+            /* более плавно */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            /* почти незаметная линия */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
             position: relative;
             z-index: 0;
+            image-rendering: auto;
+            /* сохраняем естественную чёткость */
         }
 
         .card:hover img {
-            transform: scale(1.04);
+            transform: scale(1.03);
+            /* увеличение чуть меньше, чтобы не терять качество */
         }
 
         .card span {
             display: block;
-            padding: 18px 12px 10px;
-            font-size: 1em;
+            padding: 12px 10px 6px;
+            /* меньше отступов */
+            font-size: 0.9em;
+            /* шрифт чуть меньше, аккуратнее */
             font-weight: bold;
             color: #4a3424;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             transition: color 0.5s ease;
             position: relative;
             z-index: 3;
@@ -425,16 +440,17 @@
         .card span::after {
             content: '';
             display: block;
-            width: 30px;
+            width: 24px;
+            /* линия короче */
             height: 2px;
             background: linear-gradient(90deg, #d4c5b8, transparent);
-            margin: 8px auto 0;
+            margin: 6px auto 0;
             border-radius: 2px;
             transition: width 0.3s ease;
         }
 
         .card:hover span::after {
-            width: 50px;
+            width: 40px;
             background: linear-gradient(90deg, #b8a392, transparent);
         }
 
@@ -554,12 +570,19 @@
             }
 
             .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                gap: 18px;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                /* на телефоне ещё меньше */
+                gap: 15px;
             }
 
             .card img {
-                height: 160px;
+                height: 130px;
+                /* на телефоне картинка меньше */
+            }
+
+            .card span {
+                font-size: 0.8em;
+                padding: 8px 8px 4px;
             }
 
             .about::before {
