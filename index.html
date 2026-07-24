@@ -35,7 +35,6 @@
                 radial-gradient(ellipse at 60% 20%, rgba(200, 185, 170, 0.06) 130px, transparent 130px);
         }
 
-        /* ТЁМНАЯ ТЕМА */
         body.dark-theme {
             background-color: #1a1512;
             color: #e8ddd0;
@@ -44,8 +43,9 @@
         body.dark-theme header,
         body.dark-theme .about,
         body.dark-theme .card,
-        body.dark-theme footer {
-            background: rgba(30, 25, 22, 0.7);
+        body.dark-theme footer,
+        body.dark-theme .modal-content {
+            background: rgba(30, 25, 22, 0.85);
             border-color: rgba(255, 255, 255, 0.08);
         }
 
@@ -55,36 +55,22 @@
         body.dark-theme footer h3,
         body.dark-theme footer p,
         body.dark-theme footer a,
-        body.dark-theme .footer-copyright {
+        body.dark-theme .footer-copyright,
+        body.dark-theme .modal-title,
+        body.dark-theme .modal-close {
             color: #e8ddd0;
         }
 
-        body.dark-theme footer a {
-            border-bottom-color: rgba(255, 255, 255, 0.2);
-        }
-
-        body.dark-theme footer a:hover {
+        body.dark-theme .modal-close:hover {
             color: #ffffff;
-            border-bottom-color: #ffffff;
         }
 
-        body.dark-theme .card span::after {
-            background: linear-gradient(90deg, #6b5544, transparent);
-        }
-
-        body.dark-theme .footer-copyright {
-            border-top-color: rgba(255, 255, 255, 0.08);
-        }
-
-        body.dark-theme .theme-toggle {
-            background: rgba(30, 25, 22, 0.7);
+        body.dark-theme .modal-thumb {
             border-color: rgba(255, 255, 255, 0.1);
         }
 
-        body.dark-theme .to-top {
-            background: rgba(30, 25, 22, 0.7);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #e8ddd0;
+        body.dark-theme .modal-thumb:hover {
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         /* ========================================
@@ -249,10 +235,6 @@
             border-radius: 2px;
         }
 
-        /* ========================================
-           НОВЫЙ ЗНАЧОК — КВАДРАТИК МОЗАИКИ
-           Плавно меняет цвет и слегка вращается
-           ======================================== */
         .mosaic-icon {
             display: inline-block;
             width: 20px;
@@ -302,13 +284,8 @@
             }
         }
 
-        /* Адаптация для тёмной темы */
         body.dark-theme .mosaic-icon {
             background: #6b5544;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        body.dark-theme .mosaic-icon {
             animation: mosaicPulseDark 3s ease-in-out infinite, mosaicRotate 6s linear infinite;
         }
 
@@ -475,6 +452,7 @@
             position: relative;
             z-index: 0;
             image-rendering: auto;
+            pointer-events: none;
         }
 
         .card:hover img {
@@ -507,6 +485,144 @@
         .card:hover span::after {
             width: 40px;
             background: linear-gradient(90deg, #b8a392, transparent);
+        }
+
+        /* ========================================
+           МОДАЛЬНОЕ ОКНО (ДЕТАЛЬНЫЙ ПРОСМОТР)
+           ======================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            background: rgba(255, 252, 248, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 2em;
+            background: none;
+            border: none;
+            color: #4a3424;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            color: #2d1e14;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: #4a3424;
+            margin-bottom: 20px;
+            padding-right: 40px;
+            letter-spacing: 1px;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .modal-thumb {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 16px;
+            cursor: zoom-in;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-thumb:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Увеличенная картинка внутри модалки */
+        .modal-thumb.enlarged {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            max-width: 90vw;
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            z-index: 2000;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+            cursor: zoom-out;
+        }
+
+        .modal-thumb.enlarged + .modal-enlarged-overlay {
+            display: block;
+        }
+
+        .modal-enlarged-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1999;
+            cursor: zoom-out;
+        }
+
+        /* Скрываем скролл, когда модалка открыта */
+        body.modal-open {
+            overflow: hidden;
         }
 
         /* ========================================
@@ -681,6 +797,23 @@
                 font-size: 0.75em;
                 padding: 6px 14px;
             }
+
+            .modal-content {
+                padding: 20px;
+            }
+
+            .modal-title {
+                font-size: 1.4em;
+            }
+
+            .modal-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 12px;
+            }
+
+            .modal-thumb {
+                height: 140px;
+            }
         }
     </style>
 </head>
@@ -700,7 +833,7 @@
     <header>
         <h1>
             МОЗАИКА
-            <span class="mosaic-icon"></span>  <!-- НОВЫЙ ЗНАЧОК -->
+            <span class="mosaic-icon"></span>
         </h1>
         <p></p>
     </header>
@@ -711,9 +844,16 @@
     </section>
 
     <!-- ===== ГАЛЕРЕЯ ===== -->
-    <section class="gallery" id="gallery">
-        <!-- Карточки будут вставлены через JS -->
-    </section>
+    <section class="gallery" id="gallery"></section>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">✕</button>
+            <h2 class="modal-title" id="modalTitle">Название работы</h2>
+            <div class="modal-gallery" id="modalGallery"></div>
+        </div>
+    </div>
 
     <!-- ===== КНОПКИ "ПОДЕЛИТЬСЯ" ===== -->
     <div style="text-align: center; margin: 0 auto 30px;">
@@ -742,99 +882,49 @@
     СКРИПТЫ
     ======================================== -->
     <script>
-        // ===== ДАННЫЕ ДЛЯ КАРТОЧЕК =====
-        const works = [
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true', title: 'Керамическая мозаика' },
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true', title: 'Мозаика стеклянная' },
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true', title: 'Натуральный камень' },
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true', title: 'серия SH' },
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true', title: 'Мозаика стекло, керамика, миксы' },
-            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true', title: 'Геомозаика' }
-        ];
-
-        // ===== СОЗДАНИЕ КАРТОЧЕК =====
-        const gallery = document.getElementById('gallery');
-
-        works.forEach((work, index) => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.style.animationDelay = (0.1 + index * 0.1) + 's';
-
-            card.innerHTML = `
-                        <img src="${work.img}" alt="${work.title}" loading="lazy">
-                        <span>${work.title}</span>
-                    `;
-
-            gallery.appendChild(card);
-        });
-
-        // ===== УВЕЛИЧЕНИЕ КАРТИНКИ ПРИ КЛИКЕ =====
-        document.querySelectorAll('.card img').forEach(img => {
-            img.addEventListener('click', function(e) {
-                e.stopPropagation();
-
-                if (this.classList.contains('enlarged')) {
-                    this.classList.remove('enlarged');
-                    document.querySelector('.card-overlay')?.remove();
-                    return;
-                }
-
-                const overlay = document.createElement('div');
-                overlay.className = 'card-overlay';
-                overlay.style.cssText = `
-                            display: block;
-                            position: fixed;
-                            top: 0; left: 0; right: 0; bottom: 0;
-                            background: rgba(0,0,0,0.5);
-                            backdrop-filter: blur(8px);
-                            z-index: 999;
-                            cursor: zoom-out;
-                        `;
-                document.body.appendChild(overlay);
-
-                this.classList.add('enlarged');
-
-                overlay.addEventListener('click', () => {
-                    this.classList.remove('enlarged');
-                    overlay.remove();
-                });
-
-                document.addEventListener('keydown', function escHandler(e) {
-                    if (e.key === 'Escape') {
-                        img.classList.remove('enlarged');
-                        overlay.remove();
-                        document.removeEventListener('keydown', escHandler);
-                    }
-                });
-            });
-        });
-
-        // ===== ТЁМНАЯ ТЕМА =====
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            themeToggle.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
-        });
-
-        // ===== КНОПКА "НАВЕРХ" =====
-        const toTopBtn = document.getElementById('toTopBtn');
-        window.addEventListener('scroll', () => {
-            toTopBtn.classList.toggle('visible', window.scrollY > 300);
-        });
-        toTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // ===== ПАРАЛЛАКС ПЯТЕН =====
-        document.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
-            const blob1 = document.getElementById('blob1');
-            const blob2 = document.getElementById('blob2');
-            const blob3 = document.getElementById('blob3');
-            if (blob1) blob1.style.transform = `translateY(${scrolled * 0.03}px)`;
-            if (blob2) blob2.style.transform = `translateY(${-scrolled * 0.04}px)`;
-            if (blob3) blob3.style.transform = `translateY(${scrolled * 0.02}px)`;
-        });
-    </script>
-</body>
-</html>
+        // ========================================
+        // ДАННЫЕ: 6 КАРТОЧЕК × 15 ФОТО
+        // ========================================
+        const works = [{
+            title: 'Керамическая мозаика',
+            cover: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+            photos: [
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true'
+            ]
+        }, {
+            title: 'Мозаика стеклянная',
+            cover: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+            photos: [
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true',
+                'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true'
+            ]
+        }, {
+            title: 'Натуральный камень',
+            cover: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/
