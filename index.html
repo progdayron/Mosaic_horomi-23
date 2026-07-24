@@ -6,7 +6,7 @@
     <title>Мозаика</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Общие стили для всей страницы */
+        /* Общие стили */
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Georgia', serif;
-            background-color: #fcf8f2;
+            background: #f5efe9;  /* Светлый тёплый бежевый */
             color: #3d3d3d;
             line-height: 1.6;
             padding: 20px;
@@ -24,43 +24,50 @@
             min-height: 100vh;
         }
 
-        /* ДЕКОРАТИВНЫЕ РАЗМЫТЫЕ ПЯТНА — ВАРИАНТ 3 */
+        /* Размытые пятна — более яркие, сочные */
         body::before,
         body::after {
             content: '';
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.3;
+            opacity: 0.4;
             z-index: -1;
             pointer-events: none;
         }
 
         body::before {
-            width: 500px;
-            height: 500px;
-            background: #e8d5c4;
-            top: -100px;
+            width: 550px;
+            height: 550px;
+            background: #f0d5c0;  /* Тёплый персиково-розовый */
+            top: -150px;
             right: -100px;
         }
 
         body::after {
-            width: 400px;
-            height: 400px;
-            background: #d4c5b8;
-            bottom: -100px;
+            width: 450px;
+            height: 450px;
+            background: #c9d9d0;  /* Мягкий зеленовато-голубой */
+            bottom: -120px;
             left: -100px;
+        }
+
+        /* Добавим третье маленькое пятно для глубины */
+        body {
+            background-image: radial-gradient(circle at 30% 70%, rgba(235, 210, 190, 0.3) 0%, transparent 50%);
         }
 
         /* Шапка */
         header {
             text-align: center;
             padding: 40px 20px 20px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
+            background: rgba(255, 252, 248, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            box-shadow: 0 8px 32px rgba(90, 62, 43, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         header h1 {
@@ -77,73 +84,110 @@
             color: #5a3e2b;
             max-width: 700px;
             margin: 0 auto 40px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
+            padding: 20px 35px;
+            background: rgba(255, 252, 248, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 50px;
-            box-shadow: 0 4px 12px rgba(90, 62, 43, 0.06);
+            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         /* Галерея */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
+            gap: 30px;
             max-width: 1100px;
             margin: 0 auto 50px;
         }
 
-        /* Карточка */
+        /* КАРТОЧКА — полупрозрачная, со стеклянным эффектом */
         .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 252, 248, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
             text-align: center;
             padding-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
         }
 
+        /* Лёгкое свечение при наведении */
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 32px rgba(90, 62, 43, 0.12);
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(90, 62, 43, 0.10),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            background: rgba(255, 252, 248, 0.8);
+        }
+
+        /* Декоративный уголок на карточке */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, transparent 50%, rgba(255, 215, 200, 0.3) 50%);
+            border-radius: 0 20px 0 0;
+            pointer-events: none;
         }
 
         .card img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .card:hover img {
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
         .card span {
             display: block;
-            padding: 14px 10px 6px;
+            padding: 16px 12px 8px;
             font-size: 1em;
             font-weight: bold;
             color: #4a3424;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Маленькая декоративная линия под названием */
+        .card span::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #d4c5b8, transparent);
+            margin: 8px auto 0;
+            border-radius: 2px;
         }
 
         /* Подвал */
         footer {
-            background: rgba(239, 230, 220, 0.7);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 252, 248, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
-            padding: 30px 20px 20px;
+            padding: 30px 25px 20px;
             margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(90, 62, 43, 0.04);
         }
 
         footer h3 {
             font-size: 1.3em;
             color: #4a3424;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         footer p {
@@ -155,7 +199,7 @@
             color: #5a3e2b;
             text-decoration: none;
             border-bottom: 1px dotted #b8a392;
-            transition: color 0.2s;
+            transition: color 0.2s, border-color 0.2s;
         }
 
         footer a:hover {
@@ -166,14 +210,15 @@
         /* Копирайт */
         .footer-copyright {
             margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(180, 160, 145, 0.3);
-            font-size: 0.9em;
+            padding-top: 18px;
+            border-top: 1px solid rgba(180, 160, 145, 0.25);
+            font-size: 0.85em;
             color: #6b5544;
             text-align: center;
+            letter-spacing: 0.3px;
         }
 
-        /* Адаптивность для телефонов */
+        /* Адаптивность */
         @media (max-width: 600px) {
             header h1 {
                 font-size: 2.2em;
@@ -182,11 +227,16 @@
 
             .gallery {
                 grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-                gap: 15px;
+                gap: 18px;
             }
 
             .card img {
-                height: 150px;
+                height: 160px;
+            }
+
+            .card::before {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
