@@ -5,6 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мозаика</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Общие стили для всей страницы */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #fcf8f2;
+            color: #3d3d3d;
+            line-height: 1.6;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ДЕКОРАТИВНЫЕ РАЗМЫТЫЕ ПЯТНА — ВАРИАНТ 3 */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 500px;
+            height: 500px;
+            background: #e8d5c4;
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: #d4c5b8;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        /* Шапка */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        header h1 {
+            font-size: 3em;
+            letter-spacing: 8px;
+            color: #5a3e2b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Блок "О нас" */
+        .about {
+            text-align: center;
+            font-size: 1.2em;
+            color: #5a3e2b;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(90, 62, 43, 0.06);
+        }
+
+        /* Галерея */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto 50px;
+        }
+
+        /* Карточка */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            text-align: center;
+            padding-bottom: 16px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(90, 62, 43, 0.12);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.03);
+        }
+
+        .card span {
+            display: block;
+            padding: 14px 10px 6px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #4a3424;
+            letter-spacing: 1px;
+        }
+
+        /* Подвал */
+        footer {
+            background: rgba(239, 230, 220, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 20px 20px;
+            margin-top: 20px;
+        }
+
+        footer h3 {
+            font-size: 1.3em;
+            color: #4a3424;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            margin: 4px 0;
+            font-size: 0.95em;
+        }
+
+        footer a {
+            color: #5a3e2b;
+            text-decoration: none;
+            border-bottom: 1px dotted #b8a392;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #2d1e14;
+            border-bottom: 1px solid #2d1e14;
+        }
+
+        /* Копирайт */
+        .footer-copyright {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(180, 160, 145, 0.3);
+            font-size: 0.9em;
+            color: #6b5544;
+            text-align: center;
+        }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2em;
+                letter-spacing: 4px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .card img {
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -35,8 +220,7 @@
         </div>
         <div class="card">
             <img src="https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true" alt="Работа №5">
-            <span>Мозаика стекло, керамика, миксы
-</span>
+            <span>Мозаика стекло, керамика, миксы</span>
         </div>
         <div class="card">
             <img src="https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true" alt="Работа №6">
@@ -51,8 +235,7 @@
             Телефон: <a href="tel:+79384832650">+7 (938) 483-26-50</a> • 
             E‑mail: <a href="mailto:yusvechnikova@mail.ru">yusvechnikova@mail.ru</a>
         </p>
-        <!-- НОВЫЙ БЛОК С КОПИРАЙТОМ -->
-        <p style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #d4c5b8; font-size: 0.9em; color: #6b5544; text-align: center;">
+        <p class="footer-copyright">
             Сайт салона "Хоромы" © 2012 Все права защищены
         </p>
     </footer>
