@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: #f5efe9;  /* Светлый тёплый бежевый */
+            background: #f5efe9;
             color: #3d3d3d;
             line-height: 1.6;
             padding: 20px;
@@ -24,7 +24,7 @@
             min-height: 100vh;
         }
 
-        /* Размытые пятна — более яркие, сочные */
+        /* Размытые пятна фона */
         body::before,
         body::after {
             content: '';
@@ -39,7 +39,7 @@
         body::before {
             width: 550px;
             height: 550px;
-            background: #f0d5c0;  /* Тёплый персиково-розовый */
+            background: #f0d5c0;
             top: -150px;
             right: -100px;
         }
@@ -47,12 +47,11 @@
         body::after {
             width: 450px;
             height: 450px;
-            background: #c9d9d0;  /* Мягкий зеленовато-голубой */
+            background: #c9d9d0;
             bottom: -120px;
             left: -100px;
         }
 
-        /* Добавим третье маленькое пятно для глубины */
         body {
             background-image: radial-gradient(circle at 30% 70%, rgba(235, 210, 190, 0.3) 0%, transparent 50%);
         }
@@ -61,13 +60,13 @@
         header {
             text-align: center;
             padding: 40px 20px 20px;
-            background: rgba(255, 252, 248, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 252, 248, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(90, 62, 43, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
         header h1 {
@@ -85,12 +84,12 @@
             max-width: 700px;
             margin: 0 auto 40px;
             padding: 20px 35px;
-            background: rgba(255, 252, 248, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 252, 248, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.04);
         }
 
         /* Галерея */
@@ -102,41 +101,37 @@
             margin: 0 auto 50px;
         }
 
-        /* КАРТОЧКА — полупрозрачная, со стеклянным эффектом */
+        /* КАРТОЧКА — полупрозрачная с чёткими контурами */
         .card {
-            background: rgba(255, 252, 248, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 252, 248, 0.25);  /* Сильная прозрачность */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
             text-align: center;
             padding-bottom: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* ГЛАВНОЕ: ЧЁТКИЕ КОНТУРЫ */
+            border: 2px solid rgba(255, 255, 255, 0.7);
             position: relative;
         }
 
-        /* Лёгкое свечение при наведении */
-        .card:hover {
-            transform: translateY(-10px) scale(1.01);
-            box-shadow: 0 20px 40px rgba(90, 62, 43, 0.10),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            background: rgba(255, 252, 248, 0.8);
-        }
-
-        /* Декоративный уголок на карточке */
-        .card::before {
+        /* Двойная рамка для эффекта "стекла" */
+        .card::after {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, transparent 50%, rgba(255, 215, 200, 0.3) 50%);
-            border-radius: 0 20px 0 0;
+            inset: 2px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 252, 248, 0.4);
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 16px 40px rgba(90, 62, 43, 0.08);
         }
 
         .card img {
@@ -144,24 +139,24 @@
             height: 220px;
             object-fit: cover;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 0.4s ease;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .card:hover img {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .card span {
             display: block;
-            padding: 16px 12px 8px;
+            padding: 18px 12px 10px;
             font-size: 1em;
             font-weight: bold;
             color: #4a3424;
             letter-spacing: 0.5px;
         }
 
-        /* Маленькая декоративная линия под названием */
+        /* Декоративная линия под названием */
         .card span::after {
             content: '';
             display: block;
@@ -174,14 +169,14 @@
 
         /* Подвал */
         footer {
-            background: rgba(255, 252, 248, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 252, 248, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 30px 25px 20px;
             margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(90, 62, 43, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.03);
         }
 
         footer h3 {
@@ -199,7 +194,7 @@
             color: #5a3e2b;
             text-decoration: none;
             border-bottom: 1px dotted #b8a392;
-            transition: color 0.2s, border-color 0.2s;
+            transition: color 0.2s;
         }
 
         footer a:hover {
@@ -207,15 +202,13 @@
             border-bottom: 1px solid #2d1e14;
         }
 
-        /* Копирайт */
         .footer-copyright {
             margin-top: 25px;
             padding-top: 18px;
-            border-top: 1px solid rgba(180, 160, 145, 0.25);
+            border-top: 1px solid rgba(180, 160, 145, 0.2);
             font-size: 0.85em;
             color: #6b5544;
             text-align: center;
-            letter-spacing: 0.3px;
         }
 
         /* Адаптивность */
@@ -232,11 +225,6 @@
 
             .card img {
                 height: 160px;
-            }
-
-            .card::before {
-                width: 40px;
-                height: 40px;
             }
         }
     </style>
