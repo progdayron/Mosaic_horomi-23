@@ -37,16 +37,6 @@
                 radial-gradient(ellipse at 60% 20%, rgba(200, 185, 170, 0.06) 130px, transparent 130px);
         }
 
-        /* АЛЬТЕРНАТИВА — ВАРИАНТ 4: ЛИСТЬЯ (растения)
-               Если хотите листья — замените блок выше на этот:
-               background-color: #f5efe9;
-               background-image:
-                   radial-gradient(circle at 10% 20%, rgba(160, 190, 150, 0.08) 15px, transparent 15px),
-                   radial-gradient(circle at 30% 60%, rgba(160, 190, 150, 0.06) 20px, transparent 20px),
-                   radial-gradient(circle at 70% 10%, rgba(160, 190, 150, 0.08) 12px, transparent 12px),
-                   radial-gradient(circle at 85% 80%, rgba(160, 190, 150, 0.06) 25px, transparent 25px);
-        */
-
         /* ТЁМНАЯ ТЕМА */
         body.dark-theme {
             background-color: #1a1512;
@@ -448,61 +438,6 @@
             background: linear-gradient(90deg, #b8a392, transparent);
         }
 
-        /* ЛАЙКИ */
-        .like-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 4px;
-            font-size: 0.9em;
-            color: #6b5544;
-            transition: color 0.5s ease;
-            position: relative;
-            z-index: 3;
-        }
-
-        .like-btn {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #b8a392;
-            padding: 4px 8px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .like-btn:hover {
-            transform: scale(1.2);
-            color: #e74c3c;
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .like-btn.liked {
-            color: #e74c3c;
-            animation: likeAnim 0.4s ease;
-        }
-
-        @keyframes likeAnim {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.4);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .like-count {
-            font-weight: bold;
-            min-width: 20px;
-            display: inline-block;
-        }
-
         /* ========================================
            КНОПКИ "ПОДЕЛИТЬСЯ"
            ======================================== */
@@ -735,7 +670,7 @@
             { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true', title: 'Геомозаика' }
         ];
 
-        // ===== СОЗДАНИЕ КАРТОЧЕК С ЛАЙКАМИ =====
+        // ===== СОЗДАНИЕ КАРТОЧЕК =====
         const gallery = document.getElementById('gallery');
 
         works.forEach((work, index) => {
@@ -746,45 +681,9 @@
             card.innerHTML = `
                         <img src="${work.img}" alt="${work.title}" loading="lazy">
                         <span>${work.title}</span>
-                        <div class="like-wrapper">
-                            <button class="like-btn" data-index="${index}">❤️</button>
-                            <span class="like-count" id="like-count-${index}">0</span>
-                        </div>
                     `;
 
             gallery.appendChild(card);
-        });
-
-        // ===== ЛАЙКИ (сохраняются в localStorage) =====
-        document.querySelectorAll('.like-btn').forEach(btn => {
-            const index = btn.dataset.index;
-            const countEl = document.getElementById(`like-count-${index}`);
-
-            // Загружаем сохранённое значение
-            let likes = localStorage.getItem(`like_${index}`) || 0;
-            countEl.textContent = likes;
-
-            // Проверяем, лайкнул ли пользователь
-            if (localStorage.getItem(`liked_${index}`) === 'true') {
-                btn.classList.add('liked');
-            }
-
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const isLiked = this.classList.toggle('liked');
-                let current = parseInt(countEl.textContent);
-
-                if (isLiked) {
-                    current++;
-                    localStorage.setItem(`liked_${index}`, 'true');
-                } else {
-                    current--;
-                    localStorage.setItem(`liked_${index}`, 'false');
-                }
-
-                countEl.textContent = current;
-                localStorage.setItem(`like_${index}`, current);
-            });
         });
 
         // ===== УВЕЛИЧЕНИЕ КАРТИНКИ ПРИ КЛИКЕ =====
