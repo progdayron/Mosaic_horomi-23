@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мозаика — Натуральный камень</title>
+    <style>
+        /* ========================================
+           БАЗОВЫЕ СТИЛИ
+           ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            color: #3d3d3d;
+            line-height: 1.6;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+            background-color: #f5efe9;
+            background-image:
+                radial-gradient(ellipse at 20% 30%, rgba(200, 185, 170, 0.08) 100px, transparent 100px),
+                radial-gradient(ellipse at 80% 60%, rgba(200, 185, 170, 0.06) 150px, transparent 150px),
+                radial-gradient(ellipse at 40% 80%, rgba(200, 185, 170, 0.04) 120px, transparent 120px),
+                radial-gradient(ellipse at 60% 20%, rgba(200, 185, 170, 0.06) 130px, transparent 130px);
+        }
+
+        body.dark-theme {
+            background-color: #1a1512;
+            color: #e8ddd0;
+        }
+
+        body.dark-theme header,
+        body.dark-theme .about,
+        body.dark-theme .card,
+        body.dark-theme footer {
+            background: rgba(30, 25, 22, 0.7);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark-theme header h1,
+        body.dark-theme .about,
+        body.dark-theme .card span,
+        body.dark-theme footer h3,
+        body.dark-theme footer p,
+        body.dark-theme footer a,
+        body.dark-theme .footer-copyright {
+            color: #e8ddd0;
+        }
+
+        body.dark-theme footer a {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark-theme footer a:hover {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
+
+        body.dark-theme .card span::after {
+            background: linear-gradient(90deg, #6b5544, transparent);
+        }
+
+        body.dark-theme .footer-copyright {
+            border-top-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body.dark-theme .theme-toggle {
+            background: rgba(30, 25, 22, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-theme .to-top {
+            background: rgba(30, 25, 22, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e8ddd0;
+        }
+
+        /* ========================================
+           ПАРАЛЛАКС-ПЯТНА
+           ======================================== */
+        .parallax-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: -1;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .parallax-blob-1 {
+            width: 550px;
+            height: 550px;
+            background: #f0d5c0;
+            top: -150px;
+            right: -100px;
+        }
+
+        .parallax-blob-2 {
+            width: 450px;
+            height: 450px;
+            background: #c9d9d0;
+            bottom: -120px;
+            left: -100px;
+        }
+
+        .parallax-blob-3 {
+            width: 250px;
+            height: 250px;
+            background: rgba(235, 210, 190, 0.2);
+            bottom: 30%;
+            right: 20%;
+            filter: blur(70px);
+        }
+
+        /* ========================================
+           ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ
+           ======================================== */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            background: rgba(255, 252, 248, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ========================================
+           КНОПКА "НАВЕРХ"
+           ======================================== */
+        .to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 252, 248, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.4em;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            color: #4a3424;
+            z-index: 100;
+        }
+
+        .to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .to-top:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ========================================
+           ШАПКА
+           ======================================== */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: rgba(255, 252, 248, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 40px rgba(90, 62, 43, 0.06);
+            position: relative;
+            overflow: hidden;
+            transition: background 0.5s ease, border-color 0.5s ease, transform 0.3s ease;
+        }
+
+        header:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 50px rgba(90, 62, 43, 0.08);
+        }
+
+        header::before {
+            content: '✦';
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 1.4em;
+            color: rgba(180, 160, 145, 0.2);
+            animation: sparkle 4s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2) rotate(45deg);
+            }
+        }
+
+        header h1 {
+            font-size: 3em;
+            letter-spacing: 10px;
+            color: #5a3e2b;
+            text-shadow: 0 2px 20px rgba(90, 62, 43, 0.05);
+            display: inline-block;
+            transition: color 0.5s ease;
+        }
+
+        header h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #b8a392, transparent);
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+        .mosaic-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-left: 12px;
+            vertical-align: middle;
+            border-radius: 4px;
+            background: #b8a392;
+            animation: mosaicPulse 3s ease-in-out infinite, mosaicRotate 6s linear infinite;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        @keyframes mosaicPulse {
+            0% {
+                background: #b8a392;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+            25% {
+                background: #d4c5b8;
+                transform: scale(1.1) rotate(5deg);
+                border-radius: 6px;
+            }
+            50% {
+                background: #c9d9d0;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+            75% {
+                background: #f0d5c0;
+                transform: scale(1.1) rotate(-5deg);
+                border-radius: 6px;
+            }
+            100% {
+                background: #b8a392;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+        }
+
+        @keyframes mosaicRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        body.dark-theme .mosaic-icon {
+            background: #6b5544;
+            animation: mosaicPulseDark 3s ease-in-out infinite, mosaicRotate 6s linear infinite;
+        }
+
+        @keyframes mosaicPulseDark {
+            0% {
+                background: #6b5544;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+            25% {
+                background: #8a7a6a;
+                transform: scale(1.1) rotate(5deg);
+                border-radius: 6px;
+            }
+            50% {
+                background: #5a7a6a;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+            75% {
+                background: #8a6a5a;
+                transform: scale(1.1) rotate(-5deg);
+                border-radius: 6px;
+            }
+            100% {
+                background: #6b5544;
+                transform: scale(1) rotate(0deg);
+                border-radius: 4px;
+            }
+        }
+
+        /* ========================================
+           БЛОК "О НАС"
+           ======================================== */
+        .about {
+            text-align: center;
+            font-size: 1.2em;
+            color: #5a3e2b;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            padding: 20px 35px;
+            background: rgba(255, 252, 248, 0.55);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.04);
+            position: relative;
+            transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+
+        .about::before {
+            content: '"';
+            font-size: 2.5em;
+            color: rgba(180, 160, 145, 0.2);
+            position: absolute;
+            top: -8px;
+            left: 18px;
+            font-family: Georgia, serif;
+        }
+
+        /* ========================================
+           ГАЛЕРЕЯ
+           ======================================== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto 50px;
+        }
+
+        /* ========================================
+           КАРТОЧКИ
+           ======================================== */
+        .card {
+            background: rgba(255, 252, 248, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
+            padding-bottom: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            animation: cardAppear 0.8s ease forwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        .card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+        .card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+        .card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 252, 248, 0.4);
+            border-color: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 16px 40px rgba(90, 62, 43, 0.08);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 0;
+            image-rendering: auto;
+            pointer-events: none;
+        }
+
+        .card:hover img {
+            transform: scale(1.03);
+        }
+
+        .card span {
+            display: block;
+            padding: 12px 10px 6px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #4a3424;
+            letter-spacing: 0.3px;
+            transition: color 0.5s ease;
+            position: relative;
+            z-index: 3;
+        }
+
+        .card span::after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: linear-gradient(90deg, #d4c5b8, transparent);
+            margin: 6px auto 0;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .card:hover span::after {
+            width: 40px;
+            background: linear-gradient(90deg, #b8a392, transparent);
+        }
+
+        /* ========================================
+           КНОПКИ "ПОДЕЛИТЬСЯ"
+           ======================================== */
+        .share-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85em;
+            text-decoration: none;
+            color: #fff;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .share-btn.vk {
+            background: linear-gradient(135deg, #4a7bf7, #4477ff);
+        }
+        .share-btn.telegram {
+            background: linear-gradient(135deg, #2ea5e0, #0088cc);
+        }
+        .share-btn.whatsapp {
+            background: linear-gradient(135deg, #42d17d, #25d366);
+        }
+
+        /* ========================================
+           ПОДВАЛ
+           ======================================== */
+        footer {
+            background: rgba(255, 252, 248, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 25px 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(90, 62, 43, 0.03);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        footer h3 {
+            font-size: 1.3em;
+            color: #4a3424;
+            margin-bottom: 12px;
+            display: inline-block;
+            transition: color 0.5s ease;
+        }
+
+        footer h3::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #b8a392, transparent);
+            margin-top: 4px;
+            border-radius: 2px;
+        }
+
+        footer p {
+            margin: 4px 0;
+            font-size: 0.95em;
+        }
+
+        footer a {
+            color: #5a3e2b;
+            text-decoration: none;
+            border-bottom: 1px dotted #b8a392;
+            transition: all 0.2s;
+        }
+
+        footer a:hover {
+            color: #2d1e14;
+            border-bottom: 1px solid #2d1e14;
+        }
+
+        .footer-copyright {
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 2px solid;
+            border-image: linear-gradient(90deg, transparent, rgba(180, 160, 145, 0.4), transparent) 1;
+            font-size: 0.85em;
+            color: rgba(107, 85, 68, 0.7);
+            text-align: center;
+            letter-spacing: 0.5px;
+            transition: color 0.5s ease;
+        }
+
+        body.dark-theme .footer-copyright {
+            color: rgba(232, 221, 208, 0.6);
+        }
+
+        /* ========================================
+           АДАПТИВНОСТЬ
+           ======================================== */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2em;
+                letter-spacing: 4px;
+            }
+
+            .mosaic-icon {
+                width: 16px;
+                height: 16px;
+                margin-left: 8px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 15px;
+            }
+
+            .card img {
+                height: 130px;
+            }
+
+            .card span {
+                font-size: 0.8em;
+                padding: 8px 8px 4px;
+            }
+
+            .about::before {
+                display: none;
+            }
+
+            header::before {
+                font-size: 1em;
+                top: 8px;
+                right: 12px;
+            }
+
+            .parallax-blob-1,
+            .parallax-blob-2 {
+                width: 250px;
+                height: 250px;
+                filter: blur(60px);
+            }
+
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+                top: 12px;
+                right: 12px;
+            }
+
+            .to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .share-btn {
+                font-size: 0.75em;
+                padding: 6px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== ПАРАЛЛАКС-ПЯТНА ===== -->
+    <div class="parallax-blob parallax-blob-1" id="blob1"></div>
+    <div class="parallax-blob parallax-blob-2" id="blob2"></div>
+    <div class="parallax-blob parallax-blob-3" id="blob3"></div>
+
+    <!-- ===== ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ ===== -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
+
+    <!-- ===== КНОПКА "НАВЕРХ" ===== -->
+    <button class="to-top" id="toTopBtn" aria-label="Наверх">↑</button>
+
+    <!-- ===== ШАПКА ===== -->
+    <header>
+        <h1>
+            МОЗАИКА
+            <span class="mosaic-icon"></span>
+        </h1>
+        <p></p>
+    </header>
+
+    <!-- ===== БЛОК "О НАС" ===== -->
+    <section class="about">
+        <p>Каждая работа создаётся вручную с вниманием к каждой детали.</p>
+    </section>
+
+    <!-- ===== ГАЛЕРЕЯ ===== -->
+    <section class="gallery" id="gallery">
+        <!-- Карточки будут вставлены через JS -->
+    </section>
+
+    <!-- ===== КНОПКИ "ПОДЕЛИТЬСЯ" ===== -->
+    <div style="text-align: center; margin: 0 auto 30px;">
+        <p style="color: #6b5544; margin-bottom: 10px; font-size: 0.9em;">Поделиться сайтом</p>
+        <div class="share-buttons">
+            <a href="https://vk.com/share.php?url=https://horomi-23.github.io/Mosaic_horomi-23/" target="_blank" class="share-btn vk">VK</a>
+            <a href="https://t.me/share/url?url=https://horomi-23.github.io/Mosaic_horomi-23/" target="_blank" class="share-btn telegram">Telegram</a>
+            <a href="https://wa.me/?text=https://horomi-23.github.io/Mosaic_horomi-23/" target="_blank" class="share-btn whatsapp">WhatsApp</a>
+        </div>
+    </div>
+
+    <!-- ===== ПОДВАЛ ===== -->
+    <footer>
+        <h3>✉️ Контакты</h3>
+        <p>
+            💬 Telegram: <a href="https://t.me/SvechnikovaYu">@SvechnikovaYu</a> •
+            📞 Телефон: <a href="tel:+79384832650">+7 (938) 483-26-50</a> •
+            ✉️ E‑mail: <a href="mailto:yusvechnikova@mail.ru">yusvechnikova@mail.ru</a>
+        </p>
+        <p class="footer-copyright">
+            Сайт салона "Хоромы" © 2012 Все права защищены
+        </p>
+    </footer>
+
+    <!-- ========================================
+    СКРИПТЫ
+    ======================================== -->
+    <script>
+        // ========================================
+        // 1. ДАННЫЕ ДЛЯ КАРТОЧЕК (6 штук)
+        // ========================================
+        const works = [
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo1.jpg?raw=true', title: 'Керамическая мозаика' },
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo2.jpg?raw=true', title: 'Мозаика стеклянная' },
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo3.jpg?raw=true', title: 'Натуральный камень' },
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo4.jpg?raw=true', title: 'серия SH' },
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo5.jpg?raw=true', title: 'Мозаика стекло, керамика, миксы' },
+            { img: 'https://github.com/progdayron/Mosaic_horomi-23/blob/main/images/photo/photo6.png?raw=true', title: 'Геомозаика' }
+        ];
+
+        // ========================================
+        // 2. СОЗДАНИЕ КАРТОЧЕК
+        // ========================================
+        const gallery = document.getElementById('gallery');
+
+        works.forEach((work, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.animationDelay = (0.1 + index * 0.1) + 's';
+
+            card.innerHTML = `
+                        <img src="${work.img}" alt="${work.title}" loading="lazy">
+                        <span>${work.title}</span>
+                    `;
+
+            gallery.appendChild(card);
+        });
+
+        // ========================================
+        // 3. ТЁМНАЯ ТЕМА
+        // ========================================
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            themeToggle.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
+        });
+
+        // ========================================
+        // 4. КНОПКА "НАВЕРХ"
+        // ========================================
+        const toTopBtn = document.getElementById('toTopBtn');
+        window.addEventListener('scroll', () => {
+            toTopBtn.classList.toggle('visible', window.scrollY > 300);
+        });
+        toTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========================================
+        // 5. ПАРАЛЛАКС ПЯТЕН
+        // ========================================
+        document.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const blob1 = document.getElementById('blob1');
+            const blob2 = document.getElementById('blob2');
+            const blob3 = document.getElementById('blob3');
+            if (blob1) blob1.style.transform = `translateY(${scrolled * 0.03}px)`;
+            if (blob2) blob2.style.transform = `translateY(${-scrolled * 0.04}px)`;
+            if (blob3) blob3.style.transform = `translateY(${scrolled * 0.02}px)`;
+        });
+    </script>
+</body>
+</html>
